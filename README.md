@@ -2,7 +2,7 @@
 In this workshop we are going to add two new capabilities to the KB agent (part 2):
  - Text recognition - the agent will extract text from images
  - Text to SQL - the agent will create SQL statements and execute queries from free text
-   - We provided demo data, but you may use your own buisness data
+   - We provided demo data, but you may use your own demo data
 
 ## Pre-requisites
 1. Follow the kb workshop guide to create kb_agent
@@ -65,7 +65,7 @@ Our agent will be able to assume this role using trust policy
 1. Upload images you want to read the text from to the bucket created
 
 ### Postgres creation for `text to SQL` tool
-1. Bring your own Postgres with business data, or create a PostgreSQL database. 
+1. Bring your own Postgres with demo data, or create a PostgreSQL database. 
 You can use RDS or Aiven, you can create the tables from schemas.sql and populate them using seed.sql
 
 ## Code deploy
