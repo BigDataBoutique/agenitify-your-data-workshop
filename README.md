@@ -56,8 +56,8 @@ Our agent will be able to assume this role using trust policy
  - `POSTGRES_JDBC_URL` - The JDBC URL to interact with Postgres
 2. Save the knowledge base id you're using, you can find it inside 2-kb-agent/kb_agent_tools.py
 3. **Important** backup the entire `2-kb-agent` directory by copy all the directory content into another directory, e.g `2-kb-agent-orig`
-4. Use the files under `agent` local directory, to override files that inside `2-kb-agent`, override Python files and requirement.txt
+4. Use the files under `agent` local directory, to override files that inside `2-kb-agent`, override Python files and requirements.txt
 Place query_examples.md and schema.sql under `2-kb-agent` directory
 9. Deploy: ```uv run --env-file .env kb_agent_deploy.py```
-10. Test: ```uv run ./kb_agent_test.py```
+10. Test: make sure kb_agent_test.py uses the arn created during deploy, then ```uv run ./kb_agent_test.py```
 11. With any issue in testing, look at Bedrock Agentcore trace in Cloudwatch, and track down the tool that had the issue

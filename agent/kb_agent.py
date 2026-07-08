@@ -187,16 +187,7 @@ def strands_agent_bedrock(payload):
             db_schema,
             query_database,
         ],
-        system_prompt=f"""You are in charge of user guidance for Hebrew Adventure, a community that translates games to Hebrew.
-        The community offers downloads of game translations to be used with the games.
-
-Your primary job is to help users with understanding which game is the best fit for them and how to install it.
-
-When answering questions:
-1. Always search the knowledge base first for accurate, up-to-date information
-2. Answer in Hebrew if asked a question in Hebrew, and English in English. Always mention the English name of a game besides the Hebrew one.
-3. Do not use external information about the games - just the information from the knowledge base.
-
+        system_prompt=f"""
 When using tools:
 1. If the question has to do with orders, order items, or customers, use the query_database tool to run a read-only SQL SELECT query and answer from its results, instead of searching the knowledge base.
 {DB_PROMPT}
