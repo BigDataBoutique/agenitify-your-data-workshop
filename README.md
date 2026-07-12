@@ -16,7 +16,7 @@ You can use RDS or Aiven, you can create the tables from schemas.sql and populat
 
 
 ### Optional Steps for image to text
-For text to SQL tool, we already created an example bucket and image
+For image to text tool, we already created an example bucket and image
 For those who wish to wirk with custom image, do upload an image via AWS Cli to a dedicated key (create a named directory)
 
 #### Upload images for `image to text` tool
@@ -26,7 +26,7 @@ Configure the following AWS profile via aws configure command (we will provide A
 aws configure --profile aws-workshop  --region "eu-west-2"
 ```
 The bucket already has an example image under this key: ```example_image/example_image.png```
-Upload image using the below command
+Upload image using the below command (without overriding ```example_image``` directory) 
 ```aws s3 cp --profile aws-workshop <PATH_TO_LOCAL_IMAGE>  s3://<BUCKET_NAME>/<YOUR_DEDICATED_DIRECTORY>/<IMAGE_FILE>```
 
 ## Code deploy
