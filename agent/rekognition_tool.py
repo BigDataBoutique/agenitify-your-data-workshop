@@ -4,28 +4,23 @@ import os
 from boto3.session import Session
 
 _boto_session = Session()
-REGION = os.environ.get("AWS_REGION", _boto_session.region_name)
-REKOGNITION_ROLE_ARN = os.environ.get("REKOGNITION_ROLE_ARN")
+REGION = "us-west-02" # os.environ.get("AWS_REGION", _boto_session.region_name)
 REKOGNITION_BUCKET = os.environ.get("REKOGNITION_BUCKET")
+REKOGNITION_ACCESS_KEY_ID = os.environ.get("REKOGNITION_ACCESS_KEY_ID")
+REKOGNITION_ACCESS_SECRET = os.environ.get("REKOGNITION_ACCESS_SECRET")
+REKOGNITION_BUCKET_IMAGE_DIR = os.environ.get("REKOGNITION_BUCKET_IMAGE_DIR")
 
 IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".bmp", ".webp", ".gif"}
 
 
 def _get_session():
-    if REKOGNITION_ROLE_ARN:
-        sts = boto3.client("sts")
-        assumed = sts.assume_role(
-            RoleArn=REKOGNITION_ROLE_ARN,
-            RoleSessionName="rekognition-tool-session",
-        )
-        creds = assumed["Credentials"]
+    if REKOGNITION_BUCKET and REKOGNITION_ACCESS_KEY_ID and REKOGNITION_ACCESS_SECRET:
         return boto3.Session(
-            aws_access_key_id=creds["AccessKeyId"],
-            aws_secret_access_key=creds["SecretAccessKey"],
-            aws_session_token=creds["SessionToken"],
-            region_name=REGION,
+            aws_access_key_id=REKOGNITION_ACCESS_KEY_ID,
+            aws_secret_access_key=REKOGNITION_ACCESS_SECRET,
         )
-    return boto3.Session(region_name=REGION)
+    else:
+        raise Exception("AWS credentials are not configured")
 
 
 @tool
@@ -46,10 +41,14 @@ def extract_text_from_all_images() -> str:
         s3 = session.client("s3")
         rekognition = session.client("rekognition")
 
-        # Paginate through all objects in the bucket
+        # Paginate through objects under the configured image directory
+        prefix = REKOGNITION_BUCKET_IMAGE_DIR or ""
+        if prefix and not prefix.endswith("/"):
+            prefix += "/"
+
         keys = []
         paginator = s3.get_paginator("list_objects_v2")
-        for page in paginator.paginate(Bucket=REKOGNITION_BUCKET):
+        for page in paginator.paginate(Bucket=REKOGNITION_BUCKET, Prefix=prefix):
             for obj in page.get("Contents", []):
                 key = obj["Key"]
                 ext = os.path.splitext(key)[1].lower()
@@ -57,7 +56,7 @@ def extract_text_from_all_images() -> str:
                     keys.append(key)
 
         if not keys:
-            return f"No images found in bucket '{REKOGNITION_BUCKET}'."
+            return f"No images found in bucket '{REKOGNITION_BUCKET}' under '{prefix}'."
 
         results = []
         for key in keys:

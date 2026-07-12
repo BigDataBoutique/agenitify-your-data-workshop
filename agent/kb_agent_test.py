@@ -8,7 +8,7 @@ from botocore.config import Config
 # Agent ARN example: arn:aws:bedrock-agentcore:us-west-2:XXXXXXXXXXXX:runtime/kb_agent-XXXXXXXXXX
 agent_arn = 'arn:aws:bedrock-agentcore:us-west-2:115068475968:runtime/kb_agent2-A0HqkdGJAe'
 
-# Prompt example: 'What are the main topics in the knowledge base?'
+# Prompt example: 'What are the main topics in the knowledge base?, How many customers do I have'
 prompt = 'Do you have images? what information you can give me about them?'
 
 # Get the current AWS region
